@@ -1,4 +1,6 @@
-package org.example;
+package org.example.view;
+
+import org.example.repository.UsuarioRepository;
 
 import javax.swing.*;
 import java.awt.*;
@@ -6,10 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class Login {
-
-    public static void main(String[] args) {
-        login();
-    }
 
     public static void login() {
         JFrame frame;
@@ -83,19 +81,21 @@ public class Login {
             public void actionPerformed(ActionEvent e) {
                 String usuario = inputUsuario.getText();
                 String contraseña = new String(inputContraseña.getPassword());
-
-                if (usuario.equals("admin") && contraseña.equals("admin")) {
-                    JOptionPane.showMessageDialog(frame, "Bienvenido " + usuario);
+                UsuarioRepository usuarioRepository = new UsuarioRepository();
+                if (usuarioRepository.validarLogin(usuario, contraseña)) {
+                    Home.home(usuario);
+                    frame.dispose();
                 } else {
-                    JOptionPane.showMessageDialog(frame, "Usuario o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(null, "Usuario o contraseña incorrectos", "Error", JOptionPane.ERROR_MESSAGE);
                 }
+
             }
         });
         botonRegistrarse.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame, "Redirigiendo a la página de registro...");
-                // Aquí puedes redirigir al formulario de registro
+                Registro.registro();
+                frame.dispose();
             }
         });
     }
